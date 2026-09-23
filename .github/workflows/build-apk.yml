@@ -29,10 +29,7 @@ jobs:
 
       - name: Self-Heal Keystore & Environment
         run: |
-          # Ensure .env file exists
           touch .env
-
-          # Ensure debug.keystore is present
           if [ -f "debug.keystore.base64" ]; then
             echo "Restoring debug.keystore from base64..."
             base64 -d debug.keystore.base64 > debug.keystore
@@ -40,46 +37,41 @@ jobs:
             echo "Generating fallback debug.keystore with keytool..."
             keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           fi
-
-          # Grant execution permissions for gradlew
           chmod +x gradlew
 
-      - name: Extract Version Name
+      - name: Extract Version
         id: get_version
         run: |
-          VERSION_NAME=$(grep -o 'versionName = "[^"]*"' app/build.gradle.kts | cut -d'"' -f2 || echo "1.0.0")
-          VERSION_CODE=$(grep -o 'versionCode = [0-9]*' app/build.gradle.kts | awk '{print $3}' || echo "1")
-          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
-          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_OUTPUT
-          echo "Building APK version: $VERSION_NAME (Code: $VERSION_CODE)"
+          V_NAME=$(grep -o 'versionName = "[^"]*"' app/build.gradle.kts | cut -d'"' -f2 || echo "1.0.0")
+          V_CODE=$(grep -o 'versionCode = [0-9]*' app/build.gradle.kts | awk '{print $3}' || echo "1")
+          echo "version_name=$V_NAME" >> $GITHUB_OUTPUT
+          echo "version_code=$V_CODE" >> $GITHUB_OUTPUT
+          echo "Building PaddleOCR v$V_NAME ($V_CODE)"
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug --stacktrace
 
-      - name: Prepare Root Artifact
+      - name: Prepare APK Output
         run: |
-          APK_PATH="app/build/outputs/apk/debug/app-debug.apk"
-          APP_NAME="PaddleOCR"
-          TARGET_APK="${APP_NAME}-v${{ steps.get_version.outputs.VERSION_NAME }}.apk"
-          cp "$APK_PATH" "$TARGET_APK"
-          echo "TARGET_APK=$TARGET_APK" >> $GITHUB_ENV
+          TARGET="PaddleOCR-v${{ steps.get_version.outputs.version_name }}.apk"
+          cp app/build/outputs/apk/debug/app-debug.apk "$TARGET"
+          echo "RELEASE_APK=$TARGET" >> $GITHUB_ENV
 
-      - name: Upload APK to GitHub Artifacts
+      - name: Upload to GitHub Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: PaddleOCR-v${{ steps.get_version.outputs.VERSION_NAME }}
-          path: ${{ env.TARGET_APK }}
+          name: PaddleOCR-v${{ steps.get_version.outputs.version_name }}
+          path: ${{ env.RELEASE_APK }}
 
-      - name: Create GitHub Release
+      - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/heads/')
         with:
-          tag_name: v${{ steps.get_version.outputs.VERSION_NAME }}
-          name: Release v${{ steps.get_version.outputs.VERSION_NAME }}
+          tag_name: v${{ steps.get_version.outputs.version_name }}
+          name: Release v${{ steps.get_version.outputs.version_name }}
           body: |
             Automated direct-install APK release.
-            Version: ${{ steps.get_version.outputs.VERSION_NAME }} (Code: ${{ steps.get_version.outputs.VERSION_CODE }})
-          files: ${{ env.TARGET_APK }}
+            Version: ${{ steps.get_version.outputs.version_name }} (Code: ${{ steps.get_version.outputs.version_code }})
+          files: ${{ env.RELEASE_APK }}
           draft: false
           prerelease: false
         env:
