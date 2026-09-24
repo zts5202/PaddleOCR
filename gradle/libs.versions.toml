@@ -9,6 +9,9 @@ onnxruntime = "1.21.1"
 opencv = "4.5.5"
 coroutines = "1.9.0"
 coil = "2.7.0"
+ksp = "2.1.0-1.0.29"
+room = "2.6.1"
+camera = "1.4.1"
 test-runner = "1.2.0"
 test-ext-junit-ktx = "1.2.1"
 test-monitor = "1.7.2"
@@ -29,6 +32,14 @@ onnxruntime-android = { group = "com.microsoft.onnxruntime", name = "onnxruntime
 opencv-android = { group = "com.websitebeaver", name = "opencv", version.ref = "opencv" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "camera" }
+androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camera" }
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camera" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camera" }
+compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "test-runner" }
 androidx-test-ext-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "test-ext-junit-ktx" }
 androidx-test-monitor = { group = "androidx.test", name = "monitor", version.ref = "test-monitor" }
@@ -39,3 +50,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
