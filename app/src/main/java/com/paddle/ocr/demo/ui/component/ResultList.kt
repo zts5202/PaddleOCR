@@ -43,7 +43,7 @@ fun ResultList(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "Results (${results.size})",
+                text = "识别结果 (${results.size})",
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.weight(1f),
             )
@@ -51,7 +51,7 @@ fun ResultList(
                 onClick = onCopyAll,
                 modifier = Modifier.testTag("copy_all_button")
             ) {
-                Text("Copy All")
+                Text("一键复制")
             }
         }
         results.forEachIndexed { index, result ->

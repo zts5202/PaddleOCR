@@ -41,19 +41,19 @@ fun TimingBar(
         AssistChip(
             onClick = {},
             label = {
-                Text("Det: ${detectionMs}ms", style = MaterialTheme.typography.labelSmall)
+                Text("检测: ${detectionMs}ms", style = MaterialTheme.typography.labelSmall)
             },
         )
         AssistChip(
             onClick = {},
             label = {
-                Text("Rec: ${recognitionMs}ms", style = MaterialTheme.typography.labelSmall)
+                Text("识别: ${recognitionMs}ms", style = MaterialTheme.typography.labelSmall)
             },
         )
         AssistChip(
             onClick = {},
             label = {
-                Text("Total: ${totalMs}ms", style = MaterialTheme.typography.labelSmall)
+                Text("总耗时: ${totalMs}ms", style = MaterialTheme.typography.labelSmall)
             },
         )
     }

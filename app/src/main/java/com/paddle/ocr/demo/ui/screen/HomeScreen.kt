@@ -68,7 +68,7 @@ fun HomeScreen(viewModel: OCRViewModel = viewModel()) {
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "PaddleOCR",
+                            text = "PaddleOCR 离线识别",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.SemiBold,
                         )
@@ -100,7 +100,7 @@ fun HomeScreen(viewModel: OCRViewModel = viewModel()) {
         ) {
             when (val s = state) {
                 is OCRViewModel.UIState.Loading -> {
-                    LoadingOverlay("Loading OCR models...")
+                    LoadingOverlay("正在加载 OCR 离线模型...")
                 }
                 is OCRViewModel.UIState.Ready -> {
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -117,7 +117,7 @@ fun HomeScreen(viewModel: OCRViewModel = viewModel()) {
                         Spacer(modifier = Modifier.height(16.dp))
                         ImagePreview(bitmap = s.bitmap, results = emptyList())
                         Spacer(modifier = Modifier.height(16.dp))
-                        LoadingOverlay("Processing...")
+                        LoadingOverlay("正在识别图片文字...")
                     }
                 }
                 is OCRViewModel.UIState.Result -> {
@@ -149,7 +149,7 @@ fun HomeScreen(viewModel: OCRViewModel = viewModel()) {
                     }
                 }
                 is OCRViewModel.UIState.Error -> {
-                    LoadingOverlay("Error occurred")
+                    LoadingOverlay("发生异常")
                     ErrorDialog(
                         message = s.message,
                         onRetry = { viewModel.retry() },

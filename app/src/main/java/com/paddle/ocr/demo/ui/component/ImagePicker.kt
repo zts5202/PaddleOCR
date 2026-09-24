@@ -58,12 +58,12 @@ fun ImagePicker(
             modifier = Modifier.testTag("gallery_picker_button")
         ) {
             Icon(Icons.Default.Add, contentDescription = null)
-            Text("  Select from Gallery", modifier = Modifier.padding(start = 8.dp))
+            Text("  从相册选择图片", modifier = Modifier.padding(start = 8.dp))
         }
 
         if (sampleImages.isNotEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Or try a sample:", style = MaterialTheme.typography.bodySmall)
+            Text("或者体验内置样例：", style = MaterialTheme.typography.bodySmall)
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -72,7 +72,7 @@ fun ImagePicker(
                 sampleImages.forEachIndexed { idx, resId ->
                     Image(
                         painter = painterResource(resId),
-                        contentDescription = "Sample image $idx",
+                        contentDescription = "样例图片 $idx",
                         modifier = Modifier
                             .size(68.dp)
                             .padding(4.dp)

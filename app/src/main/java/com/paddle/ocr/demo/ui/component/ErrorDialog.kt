@@ -34,7 +34,7 @@ fun ErrorDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Error") },
+        title = { Text("错误提示") },
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
@@ -46,12 +46,12 @@ fun ErrorDialog(
         },
         confirmButton = {
             TextButton(onClick = onRetry) {
-                Text("Retry")
+                Text("重试")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Dismiss")
+                Text("关闭")
             }
         },
     )

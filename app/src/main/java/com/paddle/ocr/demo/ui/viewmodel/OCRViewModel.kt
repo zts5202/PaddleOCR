@@ -150,7 +150,8 @@ class OCRViewModel : ViewModel() {
         val text = results.joinToString("\n") { it.text }
         val clipboard = OCRApplication.instance.getSystemService(android.content.Context.CLIPBOARD_SERVICE)
                 as android.content.ClipboardManager
-        clipboard.setPrimaryClip(android.content.ClipData.newPlainText("OCR Results", text))
+        clipboard.setPrimaryClip(android.content.ClipData.newPlainText("OCR 识别结果", text))
+        android.widget.Toast.makeText(OCRApplication.instance, "已复制所有识别文本到剪贴板", android.widget.Toast.LENGTH_SHORT).show()
     }
 
     private fun decodeSampledBitmap(

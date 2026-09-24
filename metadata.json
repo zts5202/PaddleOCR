@@ -1,5 +1,5 @@
 {
-  "name": "PaddleOCR",
+  "name": "PaddleOCR 离线识别",
   "description": "Ultra-lightweight OCR with PP-OCRv6 for real-time text detection and recognition on Android",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

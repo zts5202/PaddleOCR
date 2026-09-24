@@ -30,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoadingOverlay(message: String = "Loading models...", modifier: Modifier = Modifier) {
+fun LoadingOverlay(message: String = "正在加载模型...", modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center,
