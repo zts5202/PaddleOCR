@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - master
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 permissions:
@@ -12,6 +14,7 @@ permissions:
 
 jobs:
   build:
+    name: Build Android APK
     runs-on: ubuntu-latest
 
     steps:
@@ -44,11 +47,15 @@ jobs:
       - name: Extract Version
         id: get_version
         run: |
-          V_NAME=$(grep -o 'versionName = "[^"]*"' app/build.gradle.kts | cut -d'"' -f2 || echo "1.0.0")
-          V_CODE=$(grep -o 'versionCode = [0-9]*' app/build.gradle.kts | awk '{print $3}' || echo "1")
+          V_NAME=$(grep -o 'versionName = "[^"]*"' app/build.gradle.kts | cut -d'"' -f2 || echo "1.2.0")
+          V_CODE=$(grep -o 'versionCode = [0-9]*' app/build.gradle.kts | awk '{print $3}' || echo "6")
           echo "version_name=$V_NAME" >> $GITHUB_OUTPUT
           echo "version_code=$V_CODE" >> $GITHUB_OUTPUT
           echo "Building PaddleOCR v$V_NAME ($V_CODE)"
+
+      - name: Accept Android SDK Licenses
+        run: |
+          yes | ${{ env.ANDROID_HOME }}/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug --stacktrace
@@ -59,22 +66,34 @@ jobs:
           cp app/build/outputs/apk/debug/app-debug.apk "$TARGET"
           echo "RELEASE_APK=$TARGET" >> $GITHUB_ENV
 
-      - name: Upload to GitHub Artifacts
+      - name: Upload to GitHub Artifacts (Always available)
         uses: actions/upload-artifact@v4
         with:
           name: PaddleOCR-v${{ steps.get_version.outputs.version_name }}
           path: ${{ env.RELEASE_APK }}
+          retention-days: 30
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
+        if: success()
+        continue-on-error: true
         with:
           tag_name: v${{ steps.get_version.outputs.version_name }}
           name: Release v${{ steps.get_version.outputs.version_name }}
           body: |
-            Automated direct-install APK release.
-            Version: ${{ steps.get_version.outputs.version_name }} (Code: ${{ steps.get_version.outputs.version_code }})
+            ## 📱 PaddleOCR 离线文字识别 Android v${{ steps.get_version.outputs.version_name }}
+            
+            - **版本号**: v${{ steps.get_version.outputs.version_name }} (Build ${{ steps.get_version.outputs.version_code }})
+            - **安装包**: [${{ env.RELEASE_APK }}]
+            - **核心特性**:
+              - 📸 实时相机对准抓拍
+              - 📚 相册多图连续识别与一键历史落库
+              - 📄 TXT / Markdown / PDF 多格式导出
+              - 🔒 身份证/手机号敏感信息脱敏打码
+              - ⚡ 完全离线端侧 ONNX 推理
           files: ${{ env.RELEASE_APK }}
           draft: false
           prerelease: false
+          make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
