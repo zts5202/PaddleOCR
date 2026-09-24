@@ -37,6 +37,8 @@ jobs:
             echo "Generating fallback debug.keystore with keytool..."
             keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           fi
+          mkdir -p ~/.android
+          cp debug.keystore ~/.android/debug.keystore
           chmod +x gradlew
 
       - name: Extract Version
